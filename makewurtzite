@@ -1,0 +1,60 @@
+gawk -v a=$1 -v c=$2 -v nx=$3 -v ny=$4 -v nz=$5 'BEGIN {
+   if (a""=="") {
+      print "Usage: a c nx [ny [nz]], where";
+      print "             a = unit cell a (b is sqrt(3)*a,";
+      print "             c = unit cell c,";
+      print "             nx = number of cells on one side";
+      print "GaN has a=3.19 c=5.189 at RT according to Berger/Pamplin table"
+      print " The hexagonal Miller-Bravais-indices for the side facets here are:";
+      print " (or an equivalent permutation in (x,y)";
+      print "";
+      print " x = 1 0 0 0";
+      print " y = 0 1 -1 0";
+      print " z = 0 0 0 1";
+      print "";
+
+      exit;
+   }
+
+   if (ny""=="") ny=nx;
+   if (nz""=="") nz=ny;
+
+   b=a*sqrt(3);  
+
+   minx=-nx*a/2
+   miny=-ny*b/2
+   minz=-nz*c/2
+   ox=minx+a*0.125;
+   oy=miny+a*1/12.0;
+   oz=minz+c*3/16.0;
+
+   # wurtzite
+   nbasis=8;
+   i=1;
+   bx[i]= 0;        by[i]= 0;         bz[i]=0;      bt[i]=1; name[i]="I"; i++;
+   bx[i]= 1/2;      by[i]= 1/2;       bz[i]=0;      bt[i]=1; name[i]="I"; i++;
+   bx[i]= 0;        by[i]= 1/3;       bz[i]=1/2;    bt[i]=1; name[i]="I"; i++;
+   bx[i]= 1/2;      by[i]= 5/6;       bz[i]=1/2;    bt[i]=1; name[i]="I"; i++;
+   bx[i]= 0;        by[i]= 0;         bz[i]=5/8;    bt[i]=2; name[i]="Ag"; i++;
+   bx[i]= 1/2;      by[i]= 1/2;       bz[i]=5/8;    bt[i]=2; name[i]="Ag"; i++;
+   bx[i]= 0;        by[i]= 1/3;       bz[i]=1/8;    bt[i]=2; name[i]="Ag"; i++;
+   bx[i]= 1/2;      by[i]= 5/6;       bz[i]=1/8;    bt[i]=2; name[i]="Ag"; i++;
+ 
+   N=nx*ny*nz*nbasis;
+   printf "Cell size %.10g %.10g %.10g\n",nx*a,ny*b,nz*c >> "/dev/stderr";
+   printf "Number of atoms %d\n",N  >> "/dev/stderr";
+
+   printf " %d\n",N
+   printf " wurtzite, size %.10g %.10g %.10g\n",nx*a,ny*b,nz*c;
+
+   for (i=0;i<nx;i++) for (j=0;j<ny;j++) for (k=0;k<nz;k++) {
+      for (l=1;l<=nbasis;l++) {
+         x=ox+(i+bx[l])*a; y=oy+(j+by[l])*b; z=oz+(k+bz[l])*c; t=bt[l];
+	 nname[i]=name[l];
+         printf "%s %.10f %.10f %.10f %d\n",name[l],x,y,z,t;
+      }
+   }
+
+
+exit;
+}'

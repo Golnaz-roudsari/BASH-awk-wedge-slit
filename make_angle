@@ -1,0 +1,31 @@
+#!/bin/bash
+#awk '{if (NR<3) print}{if (NR>2) print $1, $2, $3, -1*$4}' agi_vertical.xyz > mirror_vertical.xyz
+#awk '{c=$3; d=$4}{if (NR<3) print}{if (NR>2) print $1, $2, d, c}' mirror_vertical.xyz > diagonal_90.xyz
+
+
+awk '{c=$3; d=$4}{if (NR<3) print}{if (NR>2) print $1, $2,  $3=(-0.866*c-0.5*d),$4= ((0.5*c-0.866*d))}' new_120_2_I.xyz > diagonal_120_1.xyz
+
+awk '{c=$3; d=$4}{if (NR<3) print}{if (NR>2) print $1, $2,  $3=(0.866*c-0.5*d),$4= ((0.5*c+0.866*d))}' new_120_2.xyz > diagonal_120_2.xyz
+
+awk '{c=$3; d=$4}{if (NR<3) print}{if (NR>2) print $1, $2,  $3=(-0.866*c-0.5*d),$4= ((0.5*c-0.866*d))}' mirror_vertical.xyz > diagonal_120_x.xyz
+
+awk '{c=$3; d=$4}{if (NR<3) print}{if (NR>2) print $1, $2,  $3=(0.866*c-0.5*d),$4= ((0.5*c+0.866*d))}' agi_vertical.xyz > diagonal_120_y.xyz
+
+
+
+
+
+
+
+
+
+#awk '{if (NR>2) print}' diagonal_90.xyz > tmp1
+#awk '{if (NR>2)print}' diagonal_60.xyz >> tmp1
+#wc -l tmp1 | awk '{print $1}' > tmp2
+#awk '{if (NR==2) print}' test.xyz >> tmp2
+#cat tmp1 >> tmp2
+#cp tmp2 pit_60.xyz
+#rm tmp1
+#rm tmp2
+
+

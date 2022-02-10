@@ -1,0 +1,6 @@
+awk 'BEGIN{count=-1}{if (NR>2) print count, $2, 1, "AgI", $2, count; count++}' agi_shift_down.gro > test.itp
+
+awk '$2!="I" {print $1,$2,$3,$4,$5,$6,0.6;next};$2!="Ag"{print $1,$2,$3,$4,$5,$6,-0.6}' test.itp > tmp.itp
+
+awk '{if(NR<7) print}' name.itp > silver_iodide.itp
+cat tmp.itp >> silver_iodide.itp 
