@@ -1,0 +1,15 @@
+#!/bin/bash
+#awk '{if (NR<3) print; if ((NR>2) && ($4> 13.6) && ($2<8.0)) print }' cubic > slab_6layer
+
+wc -l agi_20.xyz | awk '{print ($1-2)*2}' > test1
+awk '{if (NR==2) print}' agi_20 >> test1
+awk '{if (NR<3) print; if (NR>2) print $1, $2, $3, -1*$4 }' agi_20 > mirror
+awk '{if (NR>2) print $1, $2, $3, ($4+12.17753+27.11)}' mirror >> test1
+cp test1 test2
+cat agi_20 >> test2
+awk '{if ((NR<6403) || (NR>6404)) {print}}' test2 > test3
+rm test1
+rm mirror
+rm test2
+cp test3 mw_7_layers.xyz
+rm test3
